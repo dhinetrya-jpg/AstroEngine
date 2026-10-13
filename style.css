@@ -1,0 +1,124 @@
+/**
+ * File 9: style.css (The Premium Dark Maroon Vector Stylesheet)
+ * Neuro-Design aesthetic variables for AstroEngine Platform
+ */
+
+:root {
+  --bg-dark: #140407;
+  --panel-dark: #1c050b;
+  --panel-surface: #22070e;
+  --accent-emerald: #00E676;
+  --accent-gold: #F59E0B;
+  --text-main: #FFFFFF;
+  --text-muted: #a3828a;
+  --border-color: #47121e;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.app-wrapper {
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--bg-dark);
+  min-height: 100vh;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.status-pill {
+  color: var(--accent-emerald);
+  text-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+}
+
+.calibration-frame h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 24px;
+  letter-spacing: -0.5px;
+}
+
+.calibration-frame p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.neuro-form {
+  margin-top: 32px;
+}
+
+.input-group {
+  background-color: var(--panel-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.input-group input[type="text"],
+.input-group input[type="time"] {
+  width: 100%;
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  color: var(--text-main);
+  box-sizing: border-box;
+}
+
+.telemetry-feedback {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid var(--accent-emerald);
+  color: var(--accent-emerald);
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.1);
+}
+
+.submit-btn:hover {
+  background-color: var(--accent-emerald);
+  color: var(--bg-dark);
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+}
+
+.hidden {
+  display: none !important;
+}
