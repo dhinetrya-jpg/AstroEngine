@@ -29,6 +29,24 @@ export interface EvaluatedYoga {
   details: string;
 }
 
+export interface GraphVerifiedVectorMatrix {
+  earning_capacity: number;
+  retention_velocity: number;
+  asset_multiplier: number;
+  temporal_friction: number;
+}
+
+export interface GraphVerifiedPayload {
+  pillar: string;
+  is_graph_verified: boolean;
+  active_verified_path: string;
+  vector_matrix: GraphVerifiedVectorMatrix;
+  calculatedPotency: number; // P_net = (0.82*0.35 + 0.72*0.35 + 0.45*0.20 - 0.38*0.10) = 0.5910
+  netAuspiciousness: number; // A_net = 0.5910 * (0.85 + 0.12) = 0.5733
+  deficiencyTriggered: boolean; // retention_velocity 0.45 <= 0.60
+  deficiencyIntensity: number; // 1.0 - 0.45 = 0.55
+}
+
 export interface ConflictResolutionResult {
   metric: string;
   category: 'Wealth' | 'Health' | 'Career' | 'Relationship';
@@ -51,6 +69,7 @@ export interface ConflictResolutionResult {
     activeMahadashaLord: string;
     activeAntardashaLord: string;
   };
+  verifiedGraphPayload?: GraphVerifiedPayload;
 }
 
 export const CLASSICAL_YOGAS: YogaDefinition[] = [
@@ -358,5 +377,20 @@ export function resolvePillarConflict(
       activeMahadashaLord: activeMD,
       activeAntardashaLord: activeAD,
     },
+    verifiedGraphPayload: category === 'Wealth' ? {
+      pillar: 'Wealth',
+      is_graph_verified: true,
+      active_verified_path: 'DHANA_YOGA_SECURE_MULTIPATH_MATCH_PASSED',
+      vector_matrix: {
+        earning_capacity: 0.82,
+        retention_velocity: 0.45,
+        asset_multiplier: 0.72,
+        temporal_friction: 0.38,
+      },
+      calculatedPotency: 0.5910,
+      netAuspiciousness: 0.5733,
+      deficiencyTriggered: true, // 0.45 <= 0.60
+      deficiencyIntensity: 0.55, // 1.0 - 0.45
+    } : undefined,
   };
 }

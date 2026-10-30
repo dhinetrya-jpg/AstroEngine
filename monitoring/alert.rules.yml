@@ -1,0 +1,12 @@
+groups:
+  - name: astroengine-latency-alerts
+    rules:
+      - alert: SubsystemLatencyViolationP99
+        expr: histogram_quantile(0.99, sum(rate(astroengine_stage_duration_seconds_bucket[2m])) by (le, stage_name)) > 0.50
+        for: 2m
+        labels:
+          severity: critical
+          tier: backend-orchestrator
+        annotations:
+          summary: "Critical Latency Violation: Subsystem P99 crossed 500ms threshold"
+          description: "The processing stage [{{ $labels.stage_name }}] is exhibiting a p99 latency spike of {{ $value | printf \"%.2f\" }}s over a 2-minute rolling window. Immediate core performance check required."

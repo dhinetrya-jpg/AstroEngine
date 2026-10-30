@@ -1,52 +1,63 @@
 version: '3.8'
 
 services:
-  astroengine-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: astroengine-app
+  api:
+    build: .
     ports:
-      - "3000:3000"
+      - "8080:8080"
     environment:
-      - PORT=3000
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://astro_admin:astro_secure_2026@postgres:5432/astro_engine_db
+      - DATABASE_URL=postgres://astro_user:secure_pass@postgres:5432/astro_db?sslmode=disable
       - NEO4J_URI=bolt://neo4j:7687
-      - NEO4J_USER=neo4j
-      - NEO4J_PASSWORD=astro_graph_secret
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       - postgres
       - neo4j
-    restart: unless-stopped
 
   postgres:
     image: postgres:16-alpine
-    container_name: astroengine-postgres
     environment:
-      - POSTGRES_USER=astro_admin
-      - POSTGRES_PASSWORD=astro_secure_2026
-      - POSTGRES_DB=astro_engine_db
+      POSTGRES_USER: astro_user
+      POSTGRES_PASSWORD: secure_pass
+      POSTGRES_DB: astro_db
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./schema.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
   neo4j:
-    image: neo4j:5.20-community
-    container_name: astroengine-neo4j
+    image: neo4j:5-community
     environment:
-      - NEO4J_AUTH=neo4j/astro_graph_secret
-      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_AUTH=none
     volumes:
       - neo4jdata:/data
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/alert.rules.yml:/etc/prometheus/alert.rules.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
-      - "7474:7474"
-      - "7687:7687"
-    restart: unless-stopped
+      - "9090:9090"
+    depends_on:
+      - alertmanager
+
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+    ports:
+      - "9093:9093"
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin_production_secure_pass
+    depends_on:
+      - prometheus
 
 volumes:
   pgdata:

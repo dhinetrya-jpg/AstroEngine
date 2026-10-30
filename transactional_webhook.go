@@ -81,8 +81,8 @@ func (ws *WebhookServer) HandlePaymentCallback(w http.ResponseWriter, r *http.Re
 		// Prevent double-processing or replay attack vulnerabilities
 		if currentStatus == "COMPLETED" {
 			tx.Commit()
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"status":"already_processed"}`))
+			w.WriteHeader(http.StatusConflict) // HTTP 409 Conflict for replay prevention
+			w.Write([]byte(`{"status":"already_processed","error":"replay_attack_detected"}`))
 			return
 		}
 
